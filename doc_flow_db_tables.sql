@@ -135,7 +135,7 @@ CREATE TABLE documentation(
 	project_id BIGINT UNSIGNED NOT NULL COMMENT 'id of project that this book or volume of documentation belongs',
 	stage_id BIGINT UNSIGNED NOT NULL COMMENT 'stage of documetation such as \'ПД\', \'РД\' and so on',
 	started_at DATE NOT NULL,
-	finishes_at DATE DEFAULT '2099-12-31',
+	finished_at DATE DEFAULT '2099-12-31',
 	curator_id BIGINT UNSIGNED NOT NULL COMMENT 'employee who is in charge of controlling of making of documentation',
 	note VARCHAR(500),
 	FOREIGN KEY (project_id) REFERENCES projects(id),
@@ -143,15 +143,15 @@ CREATE TABLE documentation(
 	FOREIGN KEY (curator_id) REFERENCES employees(id)
 ) COMMENT 'all controlled documentation (books, volumes for all projects';
 
-DROP TABLE IF EXISTS changes;
-CREATE TABLE changes (
+DROP TABLE IF EXISTS versions;
+CREATE TABLE versions (
 	id SERIAL,
 	documentation_id BIGINT UNSIGNED NOT NULL,
-	change_number TINYINT UNSIGNED COMMENT 'change number of book or volume of documentation',
-	change_date DATE NOT NULL,
+	version_number TINYINT UNSIGNED COMMENT 'version number of book or volume of documentation',
+	version_date DATE NOT NULL,
 	is_sent ENUM ('no', 'yes') NOT NULL COMMENT 'is this book or volume of documentation sent to customer',
 	FOREIGN KEY (documentation_id) REFERENCES documentation(id)
-) COMMENT 'list of all documentation with changes';
+) COMMENT 'list of all documentation with versions';
 
 DROP TABLE IF EXISTS dispatches;
 CREATE TABLE dispatches (
@@ -162,8 +162,10 @@ CREATE TABLE dispatches (
 	amount TINYINT UNSIGNED NOT NULL,
 	customer_id BIGINT UNSIGNED NOT NULL,
 	disp_date DATE NOT NULL,
-	FOREIGN KEY (documentation_id) REFERENCES changes(id),
-	FOREIGN KEY (customer_id) REFERENCES customers(id)
+	signed_by BIGINT UNSIGNED NOT NULL,
+	FOREIGN KEY (documentation_id) REFERENCES versions(id),
+	FOREIGN KEY (customer_id) REFERENCES customers(id),
+	FOREIGN KEY (signed_by) REFERENCES employees(id)
 ) COMMENT 'dispatches of documentation';
 
 

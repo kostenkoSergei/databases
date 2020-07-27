@@ -149,23 +149,29 @@ CREATE TABLE versions (
 	documentation_id BIGINT UNSIGNED NOT NULL,
 	version_number TINYINT UNSIGNED COMMENT 'version number of book or volume of documentation',
 	version_date DATE NOT NULL,
-	is_sent ENUM ('no', 'yes') NOT NULL COMMENT 'is this book or volume of documentation sent to customer',
+	is_sent ENUM ('no', 'yes') NOT NULL COMMENT 'is this version of book or volume final and was sent to a customer ',
 	FOREIGN KEY (documentation_id) REFERENCES documentation(id)
 ) COMMENT 'list of all documentation with versions';
+
+DROP TABLE IF EXISTS invoices;
+CREATE TABLE invoices (
+	id SERIAL,
+	invoice_number CHAR(25) UNIQUE,
+	invoice_date DATE NOT NULL,
+	amount TINYINT UNSIGNED NOT NULL DEFAULT 6,
+	customer_id BIGINT UNSIGNED NOT NULL,
+	signed_by BIGINT UNSIGNED NOT NULL COMMENT 'person who signed invoice on behalf of controlling organization',
+	FOREIGN KEY (customer_id) REFERENCES customers(id),
+	FOREIGN KEY (signed_by) REFERENCES employees(id) 
+) COMMENT 'list of invoices';
 
 DROP TABLE IF EXISTS dispatches;
 CREATE TABLE dispatches (
 	id SERIAL,
-	disp_number CHAR(20) NOT NULL COMMENT 'delivery note number',
-	documentation_id BIGINT UNSIGNED NOT NULL COMMENT 'documentation that was sent by this delivery note',
-	address VARCHAR(255) NOT NULL,
-	amount TINYINT UNSIGNED NOT NULL,
-	customer_id BIGINT UNSIGNED NOT NULL,
-	disp_date DATE NOT NULL,
-	signed_by BIGINT UNSIGNED NOT NULL,
-	FOREIGN KEY (documentation_id) REFERENCES versions(id),
-	FOREIGN KEY (customer_id) REFERENCES customers(id),
-	FOREIGN KEY (signed_by) REFERENCES employees(id)
+	invoice_id BIGINT UNSIGNED NOT NULL COMMENT 'invoice number',
+	documentation_id BIGINT UNSIGNED NOT NULL COMMENT 'documentation that was sent by this invoice',
+	FOREIGN KEY (invoice_id) REFERENCES invoices(id),
+	FOREIGN KEY (documentation_id) REFERENCES versions(id)
 ) COMMENT 'dispatches of documentation';
 
 

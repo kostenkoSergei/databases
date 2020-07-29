@@ -14,3 +14,6 @@ WHERE
 	project_id = (SELECT id FROM projects WHERE name LIKE '%Мурманская%')
 AND 
 	stage_id = (SELECT id FROM stages WHERE name = 'РД');
+
+
+

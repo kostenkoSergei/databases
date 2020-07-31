@@ -38,4 +38,56 @@ INSERT INTO storehouses_products (value) VALUES
 	(0), (2500), (0), (30), (500), (1);
 SELECT value from storehouses_products ORDER BY value = 0 ASC, value; 
 
+/*Задание 4. 
+(по желанию) Из таблицы users необходимо извлечь пользователей, родившихся в августе и мае. 
+Месяцы заданы в виде списка английских названий ('may', 'august')
+*/
+SELECT * FROM users WHERE MONTHNAME(birthday_at) = 'may' OR MONTHNAME(birthday_at) = 'august';
+
+/*Задание 5. 
+(по желанию) Из таблицы catalogs извлекаются записи при помощи запроса. 
+SELECT * FROM catalogs WHERE id IN (5, 1, 2); Отсортируйте записи в порядке, заданном в списке IN
+*/
+SELECT * FROM catalogs WHERE id IN (5, 1, 2) ORDER BY FIELD(id, 5, 1, 2);
+
+/* Практическое задание теме “Агрегация данных”*/
+/*Задание 1. 
+Подсчитайте средний возраст пользователей в таблице users
+*/
+SELECT ROUND(AVG((DATEDIFF(CURDATE(), birthday_at)) / 365.25), 1) AS average_age FROM users; 
+
+/*Задание 2. 
+Подсчитайте количество дней рождения, которые приходятся на каждый из дней недели. 
+Следует учесть, что необходимы дни недели текущего года, а не года рождения.
+*/
+SELECT
+	COUNT(*), 
+	CASE
+		WHEN DAYNAME(CONCAT_WS('-', YEAR(NOW()), MONTH(birthday_at), DAY(birthday_at))) = 'monday' THEN 'понедельник'
+		WHEN DAYNAME(CONCAT_WS('-', YEAR(NOW()), MONTH(birthday_at), DAY(birthday_at))) = 'tuesday' THEN 'вторник'
+		WHEN DAYNAME(CONCAT_WS('-', YEAR(NOW()), MONTH(birthday_at), DAY(birthday_at))) = 'wednesday' THEN 'среда'
+		WHEN DAYNAME(CONCAT_WS('-', YEAR(NOW()), MONTH(birthday_at), DAY(birthday_at))) = 'thursday' THEN 'четверг'
+		WHEN DAYNAME(CONCAT_WS('-', YEAR(NOW()), MONTH(birthday_at), DAY(birthday_at))) = 'friday' THEN 'пятница'
+		WHEN DAYNAME(CONCAT_WS('-', YEAR(NOW()), MONTH(birthday_at), DAY(birthday_at))) = 'saturday' THEN 'суббота'
+		ELSE 'воскресенье'
+  	END AS weekdays
+FROM
+  users
+GROUP BY weekdays;
+
+-- just to check. added two more people with the same birthdays
+INSERT INTO users (name, birthday_at) VALUES
+  ('Геннадий', '1990-10-05'),
+  ('Наталья', '1984-11-12');
+
+/*Задание 3. 
+(по желанию) Подсчитайте произведение чисел в столбце таблицы.
+*/
+DROP TABLE IF EXISTS test2;
+CREATE TABLE test2 (
+  number TINYINT PRIMARY KEY AUTO_INCREMENT
+);
+INSERT INTO test2 VALUES (NULL), (NULL), (NULL), (NULL), (NULL);
+SELECT EXP(SUM(LOG(number))) FROM test2;
+
 

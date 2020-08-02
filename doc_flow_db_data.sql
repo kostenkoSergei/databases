@@ -31,7 +31,9 @@ INSERT INTO phone_numbers VALUES
 	
 INSERT INTO stages VALUES (NULL, 'ПД'), (NULL, 'РД'), (NULL, 'КД'), (NULL, 'ППО');
 
-INSERT INTO cities VALUES (NULL, 'Москва'), (NULL, 'Санкт-Петербург'), (NULL, 'Кемерово'), (NULL, 'Красноярск');
+INSERT INTO cities VALUES 
+	(NULL, 'Москва'), (NULL, 'Санкт-Петербург'), (NULL, 'Кемерово'), 
+	(NULL, 'Красноярск'), (NULL, 'Самара'),  (NULL, 'Екатеринбург');
 
 INSERT INTO expertises VALUES
 	(NULL, 'ФАУ Главгосэкспертиза России', 1, 'Фуркасовский пер., д. 6', 'info@gge.ru', 74956259595),
@@ -58,8 +60,10 @@ INSERT INTO customers VALUES
 	(NULL, 'ПАО Ленэнерго', 2, 'ул.Красного Текстильщика, 10-12', 'service@lenenergo.ru', 74993725261, 'Швецов С.Н.', 'Абрамович М.А.'),
 	(NULL, 'ОАО РЖД', 1, 'Москва, Новая Басманная ул., д. 2', 'office@css.rzd.ru', 74992629095, 'Калашников В.Б.', 'Путин В.В.'),
 	(NULL, 'ПАО ФСК ЕЭС МЭС Северо-Запада', 2, 'Пироговская наб., 9a', 'sz@fsk-ees.ru', 78127109655, 'Мурова Н.Н.', 'Абрамчук И.А.'),
-	(NULL, 'ПАО ФСК ЕЭС МЭС Сибири', 4, 'ул. Ады Лебедевой, 117', 'adm@sibir.fsk-ees.ru', 73912659500 , 'Мишустин Н.Н.', 'Трамп И.А.'),
-	(NULL, 'ПАО ТГК-1', 2, 'пр. Добролюбова, 16, корп.2, литера А', 'office.krl@tgc1.ru', 78127122655, 'Солнцев Х.Н.', 'Медведева И.А.');	
+	(NULL, 'ПАО ФСК ЕЭС МЭС Сибири', 4, 'ул. Ады Лебедевой, 117', 'adm@sibir.fsk-ees.ru', 73912659500, 'Мишустин Н.Н.', 'Трамп И.А.'),
+	(NULL, 'ПАО ТГК-1', 2, 'пр. Добролюбова, 16, корп.2, литера А', 'office.krl@tgc1.ru', 78127122655, 'Солнцев Х.Н.', 'Медведева И.А.'),
+	(NULL, 'ПАО ФСК ЕЭС МЭС Волги', 5, 'ул. Молодогвардейская, 226', 'mesvolgi@volga.fsk-ees.ru', 78463396359, 'Заплатин Н.Х.', 'Ковров И.Р.'),
+	(NULL, 'ПАО ФСК ЕЭС МЭС Урала', 6, 'ул. Толмачева, 10', 'secretar@ural.fsk-ees.ru', 73433729359, 'Петрович Н.О.', 'Цукурберг М.А.');	
 
 INSERT INTO employees (id,  lastname, firstname, middlename, department_id, division_id, email, phone_id, position_id) VALUES
 	(NULL, 'Чебаков', 'Виталий', 'Константинович', 1, 1, 'chebakov_vk@cius-ees.ru', 1, 5),
@@ -414,7 +418,7 @@ INSERT INTO dispatches VALUES
 	(NULL, 5, 48), (NULL, 5, 51), (NULL, 5, 53), (NULL, 5, 55),(NULL, 5, 57), (NULL, 5, 65), (NULL, 5, 66), -- project_id 3
 	(NULL, 6, 59), (NULL, 6, 62), (NULL, 6, 64), -- project_id 3
 	(NULL, 7, 67), (NULL, 7, 68), (NULL, 7, 69), (NULL, 7, 77), (NULL, 7, 78), -- project_id 4
-	(NULL, 8, 70), (NULL, 8, 72), (NULL, 8, 74), (NULL, 8, 76), (NULL, 6, 80), -- project_id 4
+	(NULL, 8, 70), (NULL, 8, 72), (NULL, 8, 74), (NULL, 8, 76), (NULL, 8, 80), -- project_id 4 ***
 	(NULL, 9, 81), (NULL, 9, 82), (NULL, 9, 83), (NULL, 9, 94), -- project_id 5
 	(NULL, 10, 84), (NULL, 10, 86), (NULL, 10, 90), (NULL, 10, 91), (NULL, 10, 92), (NULL, 10, 95), -- project_id 5
 	(NULL, 11, 98), (NULL, 11, 100), (NULL, 11, 111), -- project_id 6

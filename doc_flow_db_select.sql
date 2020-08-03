@@ -72,4 +72,17 @@ INNER JOIN
 WHERE 
 	d.finished_at > NOW();
 
+-- 8. to find the invoice for which the documentation was sent and what exact version was sent
+SET @some_code = '0115-004-СС';
+SELECT 
+	i.invoice_number, DATE_FORMAT(i.invoice_date,'%d.%m.%Y'), doc.name, v.version_number 
+FROM 
+	documentation doc
+INNER JOIN versions v ON v.documentation_id = doc.id
+INNER JOIN dispatches disp ON disp.documentation_id = v.id
+INNER JOIN invoices i ON i.id = disp.invoice_id
+WHERE 
+	v.documentation_id = (SELECT id FROM documentation WHERE code = @some_code) AND is_sent = true;
+
+
 

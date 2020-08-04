@@ -45,7 +45,7 @@ LEFT JOIN projects p ON p.customer_id = c.id
 WHERE p.name IS NULL;
 
 -- 6. to check list of documentation that was sent by some invoice knowing number of contract
-SET @contract_number = 'ПИР-118';
+SET @contract_number = 'ПИР-118'; -- you can choose other contract_number from projects table
 SELECT 
 	documentation.code AS doc_code, versions.version_number AS doc_version, 
 	documentation.name AS doc_name, IF(versions.is_sent, 'true', 'false') completed 
@@ -60,7 +60,7 @@ WHERE
 ORDER BY doc_code DESC;
 
 -- to check (project_id = 4 belongs to ПИР-118)
-SELECT code FROM documentation WHERE project_id = 4;
+SELECT code FROM documentation WHERE project_id = 4; -- you can choose other project_id from projects table
 
 -- 7. select documentation are not finished on current date and persons responsible for it
 SELECT 
@@ -73,9 +73,10 @@ WHERE
 	d.finished_at > NOW();
 
 -- 8. to find the invoice for which the documentation was sent and what exact version was sent
-SET @some_code = '0115-004-СС';
+SET @some_code = '0115-004-СС'; -- you can choose other code from documentation table
 SELECT 
-	i.invoice_number, DATE_FORMAT(i.invoice_date,'%d.%m.%Y'), doc.name, v.version_number 
+	i.invoice_number AS invoice, 
+	DATE_FORMAT(i.invoice_date,'%d.%m.%Y') AS `date`, doc.name AS documentation, v.version_number AS `version`
 FROM 
 	documentation doc
 INNER JOIN versions v ON v.documentation_id = doc.id
@@ -83,6 +84,21 @@ INNER JOIN dispatches disp ON disp.documentation_id = v.id
 INNER JOIN invoices i ON i.id = disp.invoice_id
 WHERE 
 	v.documentation_id = (SELECT id FROM documentation WHERE code = @some_code) AND is_sent = true;
+
+-- 9. to find what documentation was sent in some period of time
+SET @some_time = 120; -- you can set other value in days
+SELECT
+	d.code AS code, d.name AS documentation,
+	v.version_number AS `version`, i.invoice_number AS invoice, DATE_FORMAT(i.invoice_date,'%d.%m.%Y') AS `date`
+FROM 
+	invoices i
+INNER JOIN dispatches disp ON i.id = disp.invoice_id
+INNER JOIN versions v ON disp.documentation_id = v.id
+INNER JOIN documentation d ON v.documentation_id = d.id
+WHERE 
+	DATEDIFF(CURDATE(), i.invoice_date) <= 140;
+
+
 
 
 

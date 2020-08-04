@@ -98,7 +98,20 @@ INNER JOIN documentation d ON v.documentation_id = d.id
 WHERE 
 	DATEDIFF(CURDATE(), i.invoice_date) <= 140;
 
-
+-- 10. select with derived table
+-- find an amount of working documentation finished at 2018 and 2019 and corresponding projects
+SET @stage = 'РД'; -- you can choose other stage such as 'ПД', 'КД', 'ППО'
+SELECT 
+	p.name AS title, working_doc_2018_2019.amount 
+FROM
+	(SELECT 
+		d.project_id AS project, COUNT(*) AS amount
+	FROM
+		documentation d
+	INNER JOIN stages s ON d.stage_id = s.id 
+	WHERE s.name = @stage and YEAR(d.finished_at) IN (2018, 2019)
+	GROUP BY d.project_id) working_doc_2018_2019 
+INNER JOIN projects p ON p.id = working_doc_2018_2019.project;
 
 
 

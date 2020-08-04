@@ -48,6 +48,7 @@
 - doc_flow_db_tables (скрипты создания таблиц);
 - doc_flow_db_data (скрипты наполнения таблиц данными);
 - doc_flow_db_select (скрипты выборок);
+- doc_flow_views (views);
 
 
 

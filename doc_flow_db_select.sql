@@ -114,4 +114,3 @@ FROM
 INNER JOIN projects p ON p.id = working_doc_2018_2019.project;
 
 
-

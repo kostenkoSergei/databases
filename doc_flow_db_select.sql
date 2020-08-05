@@ -86,7 +86,7 @@ WHERE
 	v.documentation_id = (SELECT id FROM documentation WHERE code = @some_code) AND is_sent = true;
 
 -- 9. to find what documentation was sent in some period of time
-SET @some_time = 120; -- you can set other value in days
+SET @some_time = 140; -- you can set other value in days
 SELECT
 	d.code AS code, d.name AS documentation,
 	v.version_number AS `version`, i.invoice_number AS invoice, DATE_FORMAT(i.invoice_date,'%d.%m.%Y') AS `date`
@@ -96,7 +96,7 @@ INNER JOIN dispatches disp ON i.id = disp.invoice_id
 INNER JOIN versions v ON disp.documentation_id = v.id
 INNER JOIN documentation d ON v.documentation_id = d.id
 WHERE 
-	DATEDIFF(CURDATE(), i.invoice_date) <= 140;
+	DATEDIFF(CURDATE(), i.invoice_date) <= @some_time;
 
 -- 10. select with derived table
 -- find an amount of working documentation finished at 2018 and 2019 and corresponding projects

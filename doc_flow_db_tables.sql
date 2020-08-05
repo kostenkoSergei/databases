@@ -102,7 +102,7 @@ CREATE TABLE employees (
 	email VARCHAR(50) UNIQUE,
 	phone_id BIGINT UNSIGNED NOT NULL,
 	position_id BIGINT UNSIGNED NOT NULL,
-	fullname varchar(61) GENERATED ALWAYS AS (CONCAT(firstname, ' ', lastname)),
+	fullname varchar(61) GENERATED ALWAYS AS (CONCAT(lastname, ' ', firstname)),
 	FOREIGN KEY (department_id) REFERENCES departments(id),
 	FOREIGN KEY (division_id) REFERENCES divisions(id),
 	FOREIGN KEY (phone_id) REFERENCES phone_numbers(id),
@@ -150,7 +150,7 @@ CREATE TABLE versions (
 	documentation_id BIGINT UNSIGNED NOT NULL,
 	version_number TINYINT UNSIGNED COMMENT 'version number of book or volume of documentation',
 	version_date DATE NOT NULL,
-	is_sent BOOLEAN DEFAULT false COMMENT 'is this version of book or volume final and was sent to a customer ',
+	is_sent BIT DEFAULT 0 COMMENT 'is this version of book or volume final and was sent to a customer, 0 is not sent, 1 is sent',
 	FOREIGN KEY (documentation_id) REFERENCES documentation(id)
 ) COMMENT 'list of all documentation with versions';
 

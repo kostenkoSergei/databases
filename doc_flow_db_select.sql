@@ -16,16 +16,17 @@ AND
 	stage_id = (SELECT id FROM stages WHERE name = 'РД');
 
 -- 3. to analyze what documentation is more time consuming for development
-SET @some_project_id = 1;
+SET @some_project_id = 2;
 SELECT 
-	code, d.name, s.name, DATEDIFF(finished_at, started_at) AS `time_to_develop(days)`
+	code, d.name, s.name, 
+	IF(finished_at = '2099-12-31', 'в процессе разработки', DATEDIFF(finished_at, started_at)) AS `time_to_develop(days)`
 FROM 
 	documentation d
 INNER JOIN stages s ON s.id = d.stage_id
 WHERE 
 	d.project_id = @some_project_id
 ORDER BY 
-	`time_to_develop(days)` DESC;
+	(`time_to_develop(days)` + 0) DESC;
 	
 -- 4. to check how many projects were ordered by every customer
 SELECT
@@ -86,7 +87,7 @@ WHERE
 	v.documentation_id = (SELECT id FROM documentation WHERE code = @some_code) AND is_sent = true;
 
 -- 9. to find what documentation was sent in some period of time
-SET @some_time = 140; -- you can set other value in days
+SET @some_time = 140; -- you can set other period in days
 SELECT
 	d.code AS code, d.name AS documentation,
 	v.version_number AS `version`, i.invoice_number AS invoice, DATE_FORMAT(i.invoice_date,'%d.%m.%Y') AS `date`
@@ -113,4 +114,22 @@ FROM
 	GROUP BY d.project_id) working_doc_2018_2019 
 INNER JOIN projects p ON p.id = working_doc_2018_2019.project;
 
+-- 11. to check how much documentation was controlled by employees from some department
+SET @department = '%управления%';
+SELECT e.fullname AS employee, dep.name, COUNT(*) AS amount
+FROM documentation d
+INNER JOIN employees e ON d.curator_id = e.id
+INNER JOIN departments dep ON e.department_id = dep.id
+GROUP BY employee
+HAVING dep.name LIKE @department
+ORDER BY amount DESC;
+
+SET @department = '%инвестиц%';
+SELECT e.fullname AS employee, dep.name, COUNT(*) AS amount
+FROM documentation d
+INNER JOIN employees e ON d.curator_id = e.id
+INNER JOIN departments dep ON e.department_id = dep.id
+GROUP BY employee
+HAVING dep.name LIKE @department
+ORDER BY amount DESC;
 

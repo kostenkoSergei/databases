@@ -61,7 +61,23 @@ CALL add_project_doc_flow ('ПС 220 кВ Озерная с заходами В�
 
 SHOW PROCEDURE STATUS LIKE '%doc_flow';
 
-
-
-
+-- 4. to add some new documentation
+DROP PROCEDURE IF EXISTS add_documentation_doc_flow;
+DELIMITER $
+CREATE PROCEDURE add_documentation_doc_flow (code VARCHAR(30), name VARCHAR(255), p_id BIGINT, s_id BIGINT, `start` DATE, 
+cur_id BIGINT)
+BEGIN
+	INSERT INTO documentation (code, name, project_id, stage_id, started_at, curator_id) VALUES
+	(code, name, p_id, s_id, `start`, cur_id);
+END $
+DELIMITER ;
+-- 'ПС 220 кВ Озерная с заходами ВЛ 220 кВ' project_id = 16 after calling previous add_project_doc_flow procedure
+CALL add_documentation_doc_flow 
+('П0750-ИОС4.1', 'Автоматизированная система управления технологическими процессами', 16, 1, '2020-08-01', 2);
+CALL add_documentation_doc_flow 
+('П0750-ИОС4.2', 'Релейная защита и противоаварийная автоматика', 16, 1, '2020-08-01', 2);
+CALL add_documentation_doc_flow 
+('П0750-ИОС4.3', 'Сети связи', 16, 1, '2020-08-01', 2);
+CALL add_documentation_doc_flow 
+('П0750-ППО', 'Предпроектное обследование', 16, 4, '2020-07-20', 2);
 

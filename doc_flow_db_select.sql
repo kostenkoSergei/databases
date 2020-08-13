@@ -133,3 +133,30 @@ GROUP BY employee
 HAVING dep.name LIKE @department
 ORDER BY amount DESC;
 
+-- 12. dynamic select. to find invoice documentation was sent by knowing part or project name and stage
+PREPARE find_invoice FROM 
+'SELECT d.code AS code, d.name AS documentation, v.version_number AS version, s.name AS stage, 
+i.invoice_number AS invoice, i.invoice_date AS `departure date`, p.name AS project
+FROM projects p
+INNER JOIN documentation d ON d.project_id = p.id 
+INNER JOIN versions v ON v.documentation_id = d.id
+INNER JOIN dispatches disp ON disp.documentation_id = v. id
+INNER JOIN invoices i ON disp.invoice_id = i.id
+INNER JOIN stages s ON s.id = d.stage_id 
+WHERE p.name LIKE ? AND s.name = ?';
+
+SET @p.name = '%Колпино%'; -- you can choose part of other project's name
+SET @s.name = 'РД'; -- you can choose other stage
+EXECUTE find_invoice USING @p.name, @s.name;
+
+SET @p.name = '%Белобер%'; -- you can choose part of other project's name
+SET @s.name = 'ПД'; -- you can choose other stage
+EXECUTE find_invoice USING @p.name, @s.name;
+
+DROP PREPARE find_invoice;
+
+
+
+
+
+

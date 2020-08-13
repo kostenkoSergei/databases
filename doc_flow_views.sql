@@ -14,9 +14,7 @@ AS
 	ORDER BY fullname;
 
 -- 2. view to show all unfinished documentation at the moment and people who are responsible
-DROP VIEW IF EXISTS unfinished_doc;
-CREATE VIEW unfinished_doc
-AS
+CREATE OR REPLACE VIEW unfinished_doc AS
 	SELECT code, d.name AS documentation, s.name AS stage, e.fullname AS curator, p.name AS project, c.name AS customer
 	FROM 
 		documentation d
@@ -24,7 +22,7 @@ AS
 	INNER JOIN projects p ON d.project_id = p.id
 	INNER JOIN customers c ON p.customer_id = c.id
 	INNER JOIN stages s ON d.stage_id = s.id
-	WHERE d.finished_at > NOW();	
+	WHERE d.finished_at > NOW() ORDER BY project;	
 	
 -- 3. view to show all controlled projects
 DROP VIEW IF EXISTS project_info;

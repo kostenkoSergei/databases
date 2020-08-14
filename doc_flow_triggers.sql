@@ -40,3 +40,94 @@ INSERT INTO dispatches VALUES
 SELECT * FROM versions ORDER BY id DESC LIMIT 4;
 -- `is_sent` automatically changed from 0 to 1 after adding new dicumentation in dispatches
 	
+
+/* 2. trigger to automatically set an email for new employee. trigger works jointly with convert_func
+ */
+DROP FUNCTION IF EXISTS convert_func;
+
+-- function to convert russian letters into english 
+DELIMITER $$
+CREATE FUNCTION convert_func (original VARCHAR(512)) RETURNS VARCHAR(512) CHARSET utf8 DETERMINISTIC
+	BEGIN
+		DECLARE translit VARCHAR(512) DEFAULT '';
+		DECLARE len INT(3) DEFAULT 0;
+		DECLARE pos INT(3) DEFAULT 1;
+		DECLARE letter CHAR(4);     
+		
+		SET original = original;
+		SET len = CHAR_LENGTH(original);
+		 
+		WHILE (pos <= len) DO
+			SET letter = SUBSTRING(original, pos, 1);
+		
+			CASE TRUE
+				WHEN letter = 'а' THEN SET letter = 'a';		
+				WHEN letter = 'б' THEN SET letter = 'b';
+				WHEN letter = 'в' THEN SET letter = 'v';
+				WHEN letter = 'г' THEN SET letter = 'g';
+				WHEN letter = 'д' THEN SET letter = 'd';
+				WHEN letter = 'е' THEN SET letter = 'e';
+				WHEN letter = 'ж' THEN SET letter = 'zh';
+				WHEN letter = 'з' THEN SET letter = 'z';
+				WHEN letter = 'и' THEN SET letter = 'i';
+				WHEN letter = 'й' THEN SET letter = 'i';
+				WHEN letter = 'к' THEN SET letter = 'k';
+				WHEN letter = 'л' THEN SET letter = 'l';
+				WHEN letter = 'м' THEN SET letter = 'm';
+				WHEN letter = 'н' THEN SET letter = 'n';
+				WHEN letter = 'п' THEN SET letter = 'p';
+				WHEN letter = 'р' THEN SET letter = 'r';
+				WHEN letter = 'т' THEN SET letter = 't';
+				WHEN letter = 'ф' THEN SET letter = 'f';
+				WHEN letter = 'х' THEN SET letter = 'ch';
+				WHEN letter = 'ц' THEN SET letter = 'c';
+				WHEN letter = 'ч' THEN SET letter = 'ch';
+				WHEN letter = 'ш' THEN SET letter = 'sh';
+				WHEN letter = 'щ' THEN SET letter = 'shch';
+				WHEN letter = 'ъ' THEN SET letter = '';
+				WHEN letter = 'ы' THEN SET letter = 'y';
+				WHEN letter = 'э' THEN SET letter = 'e';
+				WHEN letter = 'ю' THEN SET letter = 'ju';
+				WHEN letter = 'я' THEN SET letter = 'ja';
+				ELSE SET letter = '_';
+			END CASE;
+		
+			SET translit = CONCAT(translit, letter);
+			SET pos = pos + 1;
+		
+		END WHILE;
+		RETURN CONCAT(translit, '@cius-ees.ru');
+ 
+	END $$
+ 
+DELIMITER ;
+
+-- trigger automatically sets an email for new added employee using convert_func
+DROP TRIGGER IF EXISTS set_emp_email;
+
+DELIMITER $
+CREATE 
+	TRIGGER set_emp_email
+	BEFORE INSERT 
+	ON employees FOR EACH ROW 
+		BEGIN
+			SET @lastname = NEW.lastname;
+			SET @firstname = NEW.firstname;
+			SET @middlename = NEW.middlename;
+			SET @rus_mail = LOWER(CONCAT(@lastname, '_', SUBSTRING(@firstname, 1, 1), SUBSTRING(@middlename, 1, 1)));
+			SET NEW.email = convert_func (@rus_mail);
+		END $
+DELIMITER ;
+
+-- to check. email was automatically established
+INSERT INTO employees (id,  lastname, firstname, middlename, department_id, division_id, phone_id, position_id) VALUES
+	(NULL, 'Андреев', 'Борис', 'Владимирович', 1, 1, 1, 5);
+
+
+
+
+     
+     
+     
+     
+     

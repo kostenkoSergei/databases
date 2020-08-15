@@ -75,6 +75,7 @@ CREATE FUNCTION convert_func (original VARCHAR(512)) RETURNS VARCHAR(512) CHARSE
 				WHEN letter = 'л' THEN SET letter = 'l';
 				WHEN letter = 'м' THEN SET letter = 'm';
 				WHEN letter = 'н' THEN SET letter = 'n';
+				WHEN letter = 'о' THEN SET letter = 'o';
 				WHEN letter = 'п' THEN SET letter = 'p';
 				WHEN letter = 'р' THEN SET letter = 'r';
 				WHEN letter = 'т' THEN SET letter = 't';
@@ -122,12 +123,3 @@ DELIMITER ;
 -- to check. email was automatically established
 INSERT INTO employees (id,  lastname, firstname, middlename, department_id, division_id, phone_id, position_id) VALUES
 	(NULL, 'Андреев', 'Борис', 'Владимирович', 1, 1, 1, 5);
-
-
-
-
-     
-     
-     
-     
-     

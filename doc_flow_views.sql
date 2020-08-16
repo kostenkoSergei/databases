@@ -1,9 +1,7 @@
 USE doc_flow;
 
 -- 1. view to represent all employees in convinient form
-DROP VIEW IF EXISTS employees_info;
-CREATE VIEW employees_info
-AS
+CREATE OR REPLACE VIEW employees_info AS
 	SELECT fullname, p.name AS `position`, de.name AS department, di.name AS division, email, n.phone_number
 	FROM 
 		employees e
@@ -25,9 +23,7 @@ CREATE OR REPLACE VIEW unfinished_doc AS
 	WHERE d.finished_at > NOW() ORDER BY project;	
 	
 -- 3. view to show all controlled projects
-DROP VIEW IF EXISTS project_info;
-CREATE VIEW project_info
-AS
+CREATE OR REPLACE VIEW project_info AS
 	SELECT p.name AS title, c.name AS customer, g.name AS gencontractor, s.name AS subcontractor, e.name AS expertise
 	FROM 
 		projects p

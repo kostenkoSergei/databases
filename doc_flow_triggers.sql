@@ -48,7 +48,7 @@ DROP FUNCTION IF EXISTS convert_func;
 
 -- Function to convert russian letters into english 
 DELIMITER $$
-CREATE FUNCTION convert_func (original VARCHAR(512)) RETURNS VARCHAR(512) CHARSET utf8 DETERMINISTIC
+CREATE FUNCTION convert_func (original VARCHAR(512)) RETURNS VARCHAR(512) CHARSET utf8 READS SQL DATA
 	BEGIN
 		DECLARE translit VARCHAR(512) DEFAULT '';
 		DECLARE len INT(3) DEFAULT 0;
@@ -150,7 +150,7 @@ DELIMITER ;
 INSERT INTO invoices VALUES
 	(NULL, 'ПИР-274-И-2020-002', '2020-06-25', DEFAULT, 1, 21); -- ПИР-274 doesn't exists in projcts table
 
-/* Trigger to validate a number of invoice before updating it in invoice table.
+/* 4. Trigger to validate a number of invoice before updating it in invoice table.
 number of invoice has to correspond with first seven digits of contract number.
 This trigger has to protect from changing present invoice numbers in table
  */

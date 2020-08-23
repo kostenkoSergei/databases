@@ -174,6 +174,3 @@ CREATE TABLE dispatches (
 	FOREIGN KEY (invoice_id) REFERENCES invoices(id),
 	FOREIGN KEY (documentation_id) REFERENCES versions(id)
 ) COMMENT 'dispatches of documentation';
-
-
-

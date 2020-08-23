@@ -24,8 +24,8 @@ END $
 
 DELIMITER ;
 
-CALL sp_show_docs ('Псков', 'РД');
-CALL sp_show_docs ('Харан', 'ПД');
+CALL sp_show_docs ('Псков', 'РД'); -- select working documentation corresponding 'ВЛ 330 кВ Псков-Лужская' project
+CALL sp_show_docs ('Харан', 'ПД'); -- select project documentation corresponding 'Строительство ВЛ 220 кВ Харанорская ГЭС - Бугдаинская - Быстринская'
 
 /* 2. procedure to add some customer, or subcontractor, or gencontractor
 (this three tables have the same structure)
@@ -47,9 +47,9 @@ DELIMITER ;
 
 -- to check
 CALL sp_insert_csg ('customers', '"МЭС Юга"', '5', '"пер. Дарницкий 2"', '"org@umes.kmv.ru"', '88793343611', 
-'"Петров А.А."', '"Иванов Б.Б."');
+'"Петров А.А."', '"Иванов Б.Б."'); -- add a customer
 CALL sp_insert_csg ('subcontractors', '"НТЦ ФСК ЕЭС"', '1', '"Каширское ш., д.22к3"', '"info@ntc-power.ru"', '74957271909', 
-'"Стулов А.А."', '"Столов Б.Б."');
+'"Стулов А.А."', '"Столов Б.Б."'); -- add a subcontractor
 
 -- 3. procedure to add some new project
 DROP PROCEDURE IF EXISTS sp_add_project;
@@ -95,13 +95,13 @@ END $
 CALL sp_add_project ('ПС 220 кВ Озерная с заходами ВЛ 220 кВ', 'ПИР-175', 'ПАО ФСК ЕЭС МЭС Сибири', 'ООО АРСЕНАЛ ПЛЮС',
 'ЗАО Энергопроект', '2020-08-06', 'ГАУ Госэкспертиза Кузбасса', @tran_result);
 
-SELECT @tran_result;
+SELECT @tran_result; -- check if insert was successfull (yes)
 
 -- try to insert some invalid data
 CALL sp_add_project ('ПС 220 кВ Озерная с заходами ВЛ 220 кВ', 'ПИР-175', 'ПАО ФСК ЕЭС МЭС Сибири', 'ООО АРСЕНАЛ ПЛЮС',
 'ЗАО Энергопроект', '2020-08-06', 'ГАУ Госэкспертиза Китая', @tran_result);
 
-SELECT @tran_result;
+SELECT @tran_result; -- check if insert was successfull (no)
 
 -- 4. procedure to add some new documentation
 DROP PROCEDURE IF EXISTS sp_add_docum;
@@ -153,12 +153,12 @@ CALL sp_add_docum
 CALL sp_add_docum
 ('П0750-ППО', 'Предпроектное обследование', 16, 'ППО', '2020-07-20', 'Соколов Владимир', @tran_result);
 
-SELECT @tran_result;
+SELECT @tran_result; -- check if last insert was successfull (yes)
 
 -- try to insert some invalid data
 CALL sp_add_docum
 ('П0750-КД', 'Предпроектное обследование', 16, 'ППО', '2020-07-20', 'Неизвестная личность', @tran_result);
 
-SELECT @tran_result;
+SELECT @tran_result; -- check if last insert was successfull (no)
 
 

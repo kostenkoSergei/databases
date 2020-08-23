@@ -440,5 +440,3 @@ INSERT INTO dispatches VALUES
 	(NULL, 27, 212), (NULL, 27, 220), -- project_id 14
 	(NULL, 28, 222), (NULL, 28, 223), (NULL, 28, 224), (NULL, 28, 230); -- project_id 15
 	
-	
-	

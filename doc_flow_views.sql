@@ -31,6 +31,4 @@ CREATE OR REPLACE VIEW project_info AS
 	INNER JOIN gencontractors g ON p.gencontractor_id = g.id 
 	INNER JOIN subcontractors s ON p.subcontractor_id = s.id 
 	INNER JOIN expertises e ON p.expertise_id = e.id;
-		
-		
-		
+				

@@ -13,10 +13,10 @@ SELECT code, name, started_at, finished_at FROM documentation
 WHERE 
 	project_id = (SELECT id FROM projects WHERE name LIKE '%Мурманская%')
 AND 
-	stage_id = (SELECT id FROM stages WHERE name = 'РД');
+	stage_id = (SELECT id FROM stages WHERE name = 'РД'); -- select only working documentation
 
 -- 3. to analyze what documentation is more time consuming for development
-SET @some_project_id = 2;
+SET @some_project_id = 12; -- to analyze 'Реконструкция и расширение ПС 110 кВ 'Красный Октябрь''
 SELECT 
 	code, d.name, s.name, 
 	IF(finished_at = '2099-12-31', 'в процессе разработки', DATEDIFF(finished_at, started_at)) AS `time_to_develop(days)`
@@ -31,7 +31,7 @@ ORDER BY
 -- 4. to check how many projects were ordered by every customer
 SELECT
 	IF(GROUPING(c.name)=1,'totally', c.name) AS customer,
-	COUNT(*) AS total_number
+	COUNT(*) AS total_amount
 FROM
 	customers c
 INNER JOIN projects p ON p.customer_id = c.id
@@ -73,7 +73,7 @@ INNER JOIN
 WHERE 
 	d.finished_at > NOW();
 
--- 8. to find the invoice for which the documentation was sent and what exact version was sent
+-- 8. to find the invoice by which the documentation was sent and what exact version was sent
 SET @some_code = '0115-004-СС'; -- you can choose other code from documentation table
 SELECT 
 	i.invoice_number AS invoice, 
@@ -86,7 +86,7 @@ INNER JOIN invoices i ON i.id = disp.invoice_id
 WHERE 
 	v.documentation_id = (SELECT id FROM documentation WHERE code = @some_code) AND is_sent = true;
 
--- 9. to find what documentation was sent in some period of time
+-- 9. to find what documentation was sent in some resent period of time
 SET @some_time = 140; -- you can set other period in days
 SELECT
 	d.code AS code, d.name AS documentation,
@@ -115,7 +115,7 @@ FROM
 INNER JOIN projects p ON p.id = working_doc_2018_2019.project;
 
 -- 11. to check how much documentation was controlled by employees from some department
-SET @department = '%управления%';
+SET @department = '%управления%'; -- check 'Департамент систем управления'
 SELECT e.fullname AS employee, dep.name, COUNT(*) AS amount
 FROM documentation d
 INNER JOIN employees e ON d.curator_id = e.id
@@ -124,7 +124,7 @@ GROUP BY employee
 HAVING dep.name LIKE @department
 ORDER BY amount DESC;
 
-SET @department = '%инвестиц%';
+SET @department = '%инвестиц%'; -- check 'Департамент реализации инвестиционных проектов'
 SELECT e.fullname AS employee, dep.name, COUNT(*) AS amount
 FROM documentation d
 INNER JOIN employees e ON d.curator_id = e.id
@@ -154,9 +154,3 @@ SET @s.name = 'ПД'; -- you can choose other stage
 EXECUTE find_invoice USING @p.name, @s.name;
 
 DROP PREPARE find_invoice;
-
-
-
-
-
-

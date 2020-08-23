@@ -26,10 +26,10 @@ INSERT INTO versions VALUES
 	(NULL, 153, 0, '2020-08-01', DEFAULT), (NULL, 154, 0, '2020-08-01', DEFAULT),
 	(NULL, 155, 0, '2020-08-01', DEFAULT), (NULL, 156, 0, '2020-07-20', DEFAULT);
 
--- Check that `is_sent` in last four new added versions equal 0
+-- Check that `is_sent` in last four new added versions equal 0 now
 SELECT * FROM versions ORDER BY id DESC LIMIT 4;
 
--- Now create new invoice to send our new added documentation to customer 
+-- Now create new invoice to send our last new added documentation to customer 
 INSERT INTO invoices VALUES
 	(NULL, 'ПИР-175-И-2020-003', '2020-08-14', DEFAULT, 5, 21); -- 'ПС 220 кВ Озерная с заходами ВЛ 220 кВ' project_id = 16
 	
@@ -126,6 +126,8 @@ DELIMITER ;
 INSERT INTO employees (id,  lastname, firstname, middlename, department_id, division_id, phone_id, position_id) VALUES
 	(NULL, 'Андреев', 'Борис', 'Владимирович', 1, 1, 1, 5);
 
+SELECT * FROM employees WHERE lastname = 'Андреев';
+
 /* 3. Trigger to validate a number of invoice before adding it in invoice table.
 number of invoice has to correspond with first seven digits of contract number
  */
@@ -175,4 +177,3 @@ DELIMITER ;
 -- To check. Update existing invoice with invoice number that doesn't correspond to any project contract number
 UPDATE invoices 
 	SET invoice_number = 'ПИР-375-И-2018-002' WHERE id = 1; -- ПИР-375 doesn't exists in projcts table
-
